@@ -1,0 +1,235 @@
+import java.util.*;
+
+class Book {
+    private String title, author, genre;
+    private int year;
+
+    public Book(String title, String author, String genre, int year) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.year = year;
+    }
+
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public String getGenre() { return genre; }
+    public int getYear() { return year; }
+}
+
+public class library {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+            System.out.println("\n==================================================================================================================================");
+            System.out.println("\t\t\t\t📚 Welcome to the world of books - Dive into the ink of inspiration 🎭.\t\t\t\t");
+
+        // HashMap for quick title lookup
+        HashMap<String, Book> titleMap = new HashMap<>();
+        // TreeSet to maintain sorted, unique genres
+        TreeSet<String> genreSet = new TreeSet<>();
+        // Queue for recent book selection history
+        Queue<Book> recentBooks = new LinkedList<>();
+
+        Book[] booksArray = {
+
+    // Science
+    new Book("The Black Hole", "Jayant Vishnu Narlikar", "Science", 1991),
+    new Book("A Brief History of Modern India", "Rajiv Ahir", "Science", 2018),
+    new Book("Ignited Minds", "APJ Abdul Kalam", "Science", 2002),
+    new Book("The Kalam Effect", "PM Nair", "Science", 2008),
+    new Book("India 2020", "APJ Abdul Kalam", "Science", 1998),
+    new Book("Einstein for Everyone", "Shrinivas L. Kulkarni", "Science", 2001),
+    new Book("Scientific Edge", "Jayant Vishnu Narlikar", "Science", 2003),
+    new Book("The Gene Machine", "Venki Ramakrishnan", "Science", 2016),
+    new Book("Reignited", "APJ Abdul Kalam", "Science", 2015),
+    new Book("The Man Who Knew Infinity", "Robert Kanigel", "Science", 1991),
+
+    // Biography
+    new Book("Wings of Fire", "APJ Abdul Kalam", "Biography", 1999),
+    new Book("Playing It My Way", "Sachin Tendulkar", "Biography", 2014),
+    new Book("The Story of My Experiments with Truth", "Mahatma Gandhi", "Biography", 1940),
+    new Book("My Country My Life", "L. K. Advani", "Biography", 2008),
+    new Book("The Accidental Prime Minister", "Sanjaya Baru", "Biography", 2014),
+    new Book("Why I Am a Hindu", "Shashi Tharoor", "Biography", 2018),
+    new Book("Kiran Bedi: Yes Madam, Sir", "Parmesh Dangwal", "Biography", 2009),
+    new Book("Indira: India’s Most Powerful Prime Minister", "Sagarika Ghose", "Biography", 2017),
+    new Book("Narendra Modi: A Political Biography", "Andy Marino", "Biography", 2014),
+    new Book("I Am Malala", "Malala Yousafzai", "Biography", 2013),
+
+    // Fiction
+    new Book("Few Things Left Unsaid", "Sudeep Nagarkar", "Fiction", 2011),
+    new Book("Half Girlfriend", "Chetan Bhagat", "Fiction", 2014),
+    new Book("The White Tiger", "Aravind Adiga", "Fiction", 2008),
+    new Book("2 States", "Chetan Bhagat", "Fiction", 2009),
+    new Book("The Immortals of Meluha", "Amish Tripathi", "Fiction", 2010),
+    new Book("The Palace of Illusions", "Chitra Banerjee Divakaruni", "Fiction", 2008),
+    new Book("The Zoya Factor", "Anuja Chauhan", "Fiction", 2008),
+    new Book("Chanakya’s Chant", "Ashwin Sanghi", "Fiction", 2010),
+    new Book("Train to Pakistan", "Khushwant Singh", "Fiction", 1956),
+    new Book("Serious Men", "Manu Joseph", "Fiction", 2010),
+
+    // Love
+    new Book("The Promise", "Nikita Singh", "Love", 2016),
+    new Book("Till the Last Breath", "Durjoy Datta", "Love", 2012),
+    new Book("I Too Had a Love Story", "Ravinder Singh", "Love", 2008),
+    new Book("Can Love Happen Twice?", "Ravinder Singh", "Love", 2011),
+    new Book("Our Impossible Love", "Durjoy Datta", "Love", 2016),
+    new Book("Someone Like You", "Durjoy Datta & Nikita Singh", "Love", 2013),
+    new Book("She Broke Up, I Didn't", "Durjoy Datta", "Love", 2010),
+    new Book("Love @ Facebook", "Nikita Singh", "Love", 2011),
+    new Book("World’s Best Boyfriend", "Durjoy Datta", "Love", 2015),
+    new Book("If It’s Not Forever", "Durjoy Datta", "Love", 2012),
+
+    // Feminism
+    new Book("Rape: A Love Story", "Shashi Tharoor", "Feminism", 2018),
+    new Book("The Liberated Woman", "Khushwant Singh", "Feminism", 1989),
+    new Book("Feminism and Indian Realities", "Devaki Jain", "Feminism", 1996),
+    new Book("Seeing Like a Feminist", "Nivedita Menon", "Feminism", 2012),
+    new Book("Gender and Politics in India", "Niraja Gopal Jayal", "Feminism", 2006),
+    new Book("The Argumentative Indian", "Amartya Sen", "Feminism", 2005),
+    new Book("Interrogating My Chandal Life", "Manoranjan Byapari", "Feminism", 2018),
+    new Book("The Good Indian Girl", "Annie Zaidi & Smriti Ravindra", "Feminism", 2011),
+    new Book("The Truth About Me", "A. Revathi", "Feminism", 2010),
+    new Book("Women and the Weight Loss Tamasha", "Rujuta Diwekar", "Feminism", 2011)
+};
+
+
+        for (Book b : booksArray) {
+            titleMap.put(b.getTitle().toLowerCase(), b);
+            genreSet.add(b.getGenre());
+        }
+
+        while (true) {
+            System.out.println("\n==================================================================================================================================");
+            System.out.println("\nAvailable Genres👇 :");
+            int index = 1;
+            Map<Integer, String> genreOptions = new HashMap<>();
+            for (String genre : genreSet) {
+                System.out.println(index + ". " + genre);
+                genreOptions.put(index++, genre);
+            }
+
+            System.out.print("Choose a genre (number)👉 : ");
+            int genreChoice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (!genreOptions.containsKey(genreChoice)) {
+                System.out.println("Invalid choice.");
+                continue;
+            }
+
+            String selectedGenre = genreOptions.get(genreChoice);
+            List<Book> filtered = new ArrayList<>();
+
+            for (Book b : booksArray) {
+                if (b.getGenre().equalsIgnoreCase(selectedGenre)) {
+                    filtered.add(b);
+                }
+            }
+
+            if (filtered.isEmpty()) {
+                System.out.println("No books found for this genre.");
+                continue;
+            }
+
+            System.out.println("\nBooks in " + selectedGenre + " Genre:");
+            for (int i = 0; i < filtered.size(); i++) {
+                System.out.println((i + 1) + ". " + filtered.get(i).getTitle());
+            }
+            
+            System.out.print("Select a book by number👉 : ");
+            int bookIndex = scanner.nextInt();
+            scanner.nextLine();
+
+            if (bookIndex < 1 || bookIndex > filtered.size()) {
+                System.out.println("Invalid book index.");
+                continue;
+            }
+
+            Book selectedBook = filtered.get(bookIndex - 1);
+            recentBooks.add(selectedBook); // Add to queue
+
+            System.out.println("\n--- Book Details ---");
+            System.out.println("Title  : " + selectedBook.getTitle());
+            System.out.println("Author : " + selectedBook.getAuthor());
+            System.out.println("Year   : " + selectedBook.getYear());
+            System.out.println("Genre  : " + selectedBook.getGenre());
+            System.out.println("--------------------");
+
+            System.out.print("Search another book by title? (yes/no): ");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("yes")) {
+                System.out.print("👉 Enter book title: ");
+                String title = scanner.nextLine().toLowerCase();
+                if (titleMap.containsKey(title)) {
+                    Book b = titleMap.get(title);
+                    System.out.println("\n[Found]");
+                    System.out.println("Title  : " + b.getTitle());
+                    System.out.println("Author : " + b.getAuthor());
+                    System.out.println("Year   : " + b.getYear());
+                    System.out.println("Genre  : " + b.getGenre());
+                } else {
+                    System.out.println("Book not found.");
+                }
+            } else {
+                System.out.print("Search another book by author? (yes/no): ");
+                input = scanner.nextLine();
+                if (input.equalsIgnoreCase("yes")) {
+                    System.out.print("👉 Enter author name: ");
+                    String author = scanner.nextLine().toLowerCase();
+                    boolean found = false;
+                    for (Book b : booksArray) {
+                        if (b.getAuthor().toLowerCase().contains(author)) {
+                            found = true;
+                            System.out.println("\n[Found]");
+                            System.out.println("Title  : " + b.getTitle());
+                            System.out.println("Author : " + b.getAuthor());
+                            System.out.println("Year   : " + b.getYear());
+                            System.out.println("Genre  : " + b.getGenre());
+                        }
+                    }
+                    if (!found) System.out.println("No books found by that author.");
+                } else {
+                    System.out.print("Search another book by genre? (yes/no): ");
+                    input = scanner.nextLine();
+                    if (input.equalsIgnoreCase("yes")) {
+                        System.out.print("👉 Enter genre name: ");
+                        String genre = scanner.nextLine().toLowerCase();
+                        boolean found = false;
+                        for (Book b : booksArray) {
+                            if (b.getGenre().toLowerCase().contains(genre)) {
+                                found = true;
+                                System.out.println("\n[Found]");
+                                System.out.println("Title  : " + b.getTitle());
+                                System.out.println("Author : " + b.getAuthor());
+                                System.out.println("Year   : " + b.getYear());
+                                System.out.println("Genre  : " + b.getGenre());
+                            }
+                        }
+                        if (!found) System.out.println("No books found in that genre.");
+                    }
+                }
+            }
+
+
+            System.out.print("\nShow recently selected books? (yes/no): ");
+            if (scanner.nextLine().equalsIgnoreCase("yes")) {
+                System.out.println("\n👉 Recent Selections:");
+                for (Book b : recentBooks) {
+                    System.out.println("- " + b.getTitle());
+                }
+            }
+
+            System.out.print("\nDo you want to continue? (yes/no): ");
+            if (!scanner.nextLine().equalsIgnoreCase("yes")) {
+                System.out.println("Exiting Library System");
+                System.out.println("Thank you Visit🙏 !!!");
+                System.out.println("Goodbye!✨...");
+                
+                break;
+            }
+        }
+
+        scanner.close();
+    }
+}
